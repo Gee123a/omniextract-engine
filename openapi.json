@@ -1,0 +1,81 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OmniExtract & Shield API",
+    "version": "1.0.0",
+    "description": "High-speed URL to Markdown reader and enterprise PII redaction engine for AI pipelines."
+  },
+  "paths": {
+    "/v1/extract": {
+      "post": {
+        "summary": "Extract clean Markdown and metadata from any public URL",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "strip_images": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "required": [
+                  "url"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful extraction"
+          }
+        }
+      }
+    },
+    "/v1/sanitize": {
+      "post": {
+        "summary": "Redact PII, emails, credit cards, SSNs, and API keys from text",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "mask_char": {
+                    "type": "string",
+                    "default": "*"
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sanitization"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://across-hamilton-medication-connector.trycloudflare.com",
+      "description": "Live Cloudflare Edge Gateway"
+    }
+  ]
+}
