@@ -41,3 +41,58 @@
 2026-10-11T18:17:17Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=60c11c2e-3a25-4521-905c-bbcf7854f3d6 status=pass target=region2.v2.argotunnel.com
 2026-10-11T18:17:17Z INF precheck component="Cloudflare API" details="API is reachable" run_id=60c11c2e-3a25-4521-905c-bbcf7854f3d6 status=pass target=api.cloudflare.com:443
 2026-10-11T18:17:17Z INF precheck complete hard_fail=false run_id=60c11c2e-3a25-4521-905c-bbcf7854f3d6 suggested_protocol=quic
+2026-10-12T00:11:09Z ERR Serve tunnel error error="datagram manager error: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.27
+2026-10-12T00:11:09Z INF Retrying connection in up to 2s connIndex=0 event=0 ip=198.41.192.27
+2026-10-12T00:11:10Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-10-12T00:11:11Z INF Registered tunnel connection connIndex=0 connection=28a862c5-609a-4949-a1a9-06a8d593bae4 event=0 ip=198.41.200.113 location=sin12 protocol=quic
+2026-10-12T00:14:59Z ERR Serve tunnel error error="datagram manager error: write udp4 0.0.0.0:55100->198.41.200.113:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.113
+2026-10-12T00:14:59Z INF Retrying connection in up to 2s connIndex=0 event=0 ip=198.41.200.113
+2026-10-12T00:15:00Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-10-12T00:15:00Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.200.113:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.113
+2026-10-12T00:15:00Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.200.113
+2026-10-12T00:15:03Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.33
+2026-10-12T00:15:04Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.200.33:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.33
+2026-10-12T00:15:04Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=198.41.200.33
+2026-10-12T00:15:11Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.47
+2026-10-12T00:15:11Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.192.47:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.47
+2026-10-12T00:15:11Z INF Retrying connection in up to 16s connIndex=0 event=0 ip=198.41.192.47
+2026-10-12T00:17:29Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-10-12T00:17:29Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.192.167:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.167
+2026-10-12T00:17:29Z INF Retrying connection in up to 32s connIndex=0 event=0 ip=198.41.192.167
+2026-10-12T00:18:53Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:18:53Z INF Registered tunnel connection connIndex=0 connection=7cc9515c-738e-4019-b8ee-bfce452a9ecb event=0 ip=198.41.200.73 location=sin07 protocol=quic
+2026-10-12T00:19:17Z ERR Serve tunnel error error="datagram manager error: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:19:17Z INF Retrying connection in up to 2s connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:19:17Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.43
+2026-10-12T00:19:17Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.200.43:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.43
+2026-10-12T00:19:17Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.200.43
+2026-10-12T00:19:19Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.193
+2026-10-12T00:19:19Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.200.193:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.193
+2026-10-12T00:19:19Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=198.41.200.193
+2026-10-12T00:19:26Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:19:26Z INF Registered tunnel connection connIndex=0 connection=3f29b80e-7d25-4adc-bce3-9290a8e265e6 event=0 ip=198.41.200.73 location=sin11 protocol=quic
+2026-10-12T00:19:57Z ERR Serve tunnel error error="datagram manager error: write udp4 0.0.0.0:55100->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:19:57Z INF Retrying connection in up to 2s connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:19:58Z ERR Failed to refresh DNS local resolver error="lookup region1.v2.argotunnel.com on [fd7a:115c:a1e0::53]:53: server misbehaving"
+2026-10-12T00:19:58Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:19:58Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:19:58Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.200.73
+2026-10-12T00:20:01Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.233
+2026-10-12T00:20:01Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.233
+2026-10-12T00:20:01Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=198.41.200.233
+2026-10-12T00:20:07Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.193
+2026-10-12T00:20:07Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.200.193:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.193
+2026-10-12T00:20:07Z INF Retrying connection in up to 16s connIndex=0 event=0 ip=198.41.200.193
+2026-10-12T00:20:52Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.233
+2026-10-12T00:20:52Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:55100->198.41.200.233:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.233
+2026-10-12T00:20:52Z INF Retrying connection in up to 32s connIndex=0 event=0 ip=198.41.200.233
+2026-10-12T00:20:55Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.47
+2026-10-12T00:20:56Z INF Registered tunnel connection connIndex=0 connection=5b56a93d-684e-459a-9f4a-6aa543717e9f event=0 ip=198.41.192.47 location=cgk01 protocol=quic
+2026-10-12T00:22:32Z ERR Serve tunnel error error="datagram manager error: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.47
+2026-10-12T00:22:32Z INF Retrying connection in up to 2s connIndex=0 event=0 ip=198.41.192.47
+2026-10-12T00:22:32Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.27
+2026-10-12T00:22:33Z INF Registered tunnel connection connIndex=0 connection=a1e3ec14-6a62-424b-a392-b2f1998366cd event=0 ip=198.41.192.27 location=cgk07 protocol=quic
+2026-10-12T02:37:50Z ERR Serve tunnel error error="datagram manager error: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.27
+2026-10-12T02:37:50Z INF Retrying connection in up to 2s connIndex=0 event=0 ip=198.41.192.27
+2026-10-12T02:37:50Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.193
+2026-10-12T02:37:50Z INF Registered tunnel connection connIndex=0 connection=05a50951-8a12-4f36-a1c8-6200db38f826 event=0 ip=198.41.200.193 location=sin11 protocol=quic

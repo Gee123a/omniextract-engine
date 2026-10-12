@@ -223,6 +223,174 @@ const server = Bun.serve({
       }), { headers: corsHeaders });
     }
 
+    // Agent Protocol Discovery Manifest
+    if (url.pathname === "/.well-known/agent.json" || url.pathname === "/agent.json") {
+      return new Response(JSON.stringify({
+        protocol: "agent-protocol/1.0",
+        name: "OmniExtract & Shield",
+        description: "Autonomous dual-rail web reader & PII sanitizer for AI agents.",
+        payment: {
+          protocol: "x402",
+          address: "0xD35f496aF8C73e4205b0Df9424D3aD6935981111",
+          network: "base",
+          cost_usd: 0.002
+        },
+        endpoints: {
+          openapi: "/openapi.json",
+          mcp: "/mcp",
+          extract: "/v1/extract",
+          sanitize: "/v1/sanitize"
+        }
+      }), { headers: corsHeaders });
+    }
+
+    // Smithery / MCP Server Card Manifest
+    if (url.pathname === "/.well-known/mcp/server-card.json" || url.pathname === "/mcp/server-card.json") {
+      return new Response(JSON.stringify({
+        $schema: "https://smithery.ai/schemas/server-card.json",
+        name: "omniextract-shield",
+        displayName: "OmniExtract & Shield",
+        description: "Ultra-fast web scraping to clean Markdown and enterprise PII redaction for AI agents.",
+        version: "1.0.0",
+        remotes: [
+          {
+            type: "http",
+            url: "https://across-hamilton-medication-connector.trycloudflare.com/mcp"
+          }
+        ],
+        tools: [
+          {
+            name: "extract_web_markdown",
+            description: "Extract clean Markdown, title, description, and token stats from any public web page URL.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                url: { type: "string", description: "The HTTP or HTTPS URL to scrape" },
+                strip_images: { type: "boolean", description: "Whether to strip image tags from output" }
+              },
+              required: ["url"]
+            }
+          },
+          {
+            name: "sanitize_pii",
+            description: "Redact and detect sensitive PII, credit cards, SSNs, emails, phone numbers, and API keys from text.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                text: { type: "string", description: "Text to sanitize" },
+                mask_char: { type: "string", description: "Mask character to replace sensitive characters with (default: *)" }
+              },
+              required: ["text"]
+            }
+          }
+        ]
+      }), { headers: corsHeaders });
+    }
+
+    // Model Context Protocol (MCP) HTTP / JSON-RPC Endpoint
+    if (url.pathname === "/mcp" && req.method === "POST") {
+      try {
+        const rpc = await req.json();
+        const id = rpc.id !== undefined ? rpc.id : null;
+
+        if (rpc.method === "initialize") {
+          return new Response(JSON.stringify({
+            jsonrpc: "2.0",
+            id,
+            result: {
+              protocolVersion: "2024-11-05",
+              capabilities: { tools: {} },
+              serverInfo: { name: "omniextract-shield", version: "1.0.0" }
+            }
+          }), { headers: corsHeaders });
+        }
+
+        if (rpc.method === "tools/list") {
+          return new Response(JSON.stringify({
+            jsonrpc: "2.0",
+            id,
+            result: {
+              tools: [
+                {
+                  name: "extract_web_markdown",
+                  description: "Extract clean Markdown, title, description, and token stats from any web URL.",
+                  inputSchema: {
+                    type: "object",
+                    properties: {
+                      url: { type: "string", description: "Public URL to fetch and convert to Markdown" },
+                      strip_images: { type: "boolean", description: "Whether to remove image tags" }
+                    },
+                    required: ["url"]
+                  }
+                },
+                {
+                  name: "sanitize_pii",
+                  description: "Redact emails, phone numbers, credit cards, SSNs, and API keys from text.",
+                  inputSchema: {
+                    type: "object",
+                    properties: {
+                      text: { type: "string", description: "Text to sanitize" },
+                      mask_char: { type: "string", description: "Mask character" }
+                    },
+                    required: ["text"]
+                  }
+                }
+              ]
+            }
+          }), { headers: corsHeaders });
+        }
+
+        if (rpc.method === "tools/call") {
+          const { name, arguments: args } = rpc.params || {};
+          if (name === "extract_web_markdown") {
+            const fetchResp = await fetch(args.url, {
+              headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" },
+              signal: AbortSignal.timeout(8000)
+            });
+            const html = await fetchResp.text();
+            const { markdown, title } = htmlToMarkdown(html, args.strip_images);
+            return new Response(JSON.stringify({
+              jsonrpc: "2.0",
+              id,
+              result: {
+                content: [{ type: "text", text: `# ${title}\n\n${markdown}` }]
+              }
+            }), { headers: corsHeaders });
+          }
+
+          if (name === "sanitize_pii") {
+            const { sanitized, findings } = sanitizeText(args.text, args.mask_char);
+            return new Response(JSON.stringify({
+              jsonrpc: "2.0",
+              id,
+              result: {
+                content: [{ type: "text", text: sanitized }],
+                findings
+              }
+            }), { headers: corsHeaders });
+          }
+
+          return new Response(JSON.stringify({
+            jsonrpc: "2.0",
+            id,
+            error: { code: -32601, message: `Tool not found: ${name}` }
+          }), { headers: corsHeaders });
+        }
+
+        return new Response(JSON.stringify({
+          jsonrpc: "2.0",
+          id,
+          result: {}
+        }), { headers: corsHeaders });
+      } catch (err: any) {
+        return new Response(JSON.stringify({
+          jsonrpc: "2.0",
+          id: null,
+          error: { code: -32700, message: err.message || "Parse error" }
+        }), { status: 400, headers: corsHeaders });
+      }
+    }
+
     // Interactive Swagger UI Documentation Portal (Root & /docs)
     if (url.pathname === "/" || url.pathname === "/docs") {
       const swaggerHtml = `<!DOCTYPE html>
@@ -294,7 +462,8 @@ const server = Bun.serve({
                              url.pathname === "/openapi.json" || 
                              url.pathname === "/llms.txt" || 
                              url.pathname === "/robots.txt" || 
-                             url.pathname === "/.well-known/ai-plugin.json";
+                             url.pathname === "/mcp" ||
+                             url.pathname.startsWith("/.well-known/");
 
     if (!isPublicEndpoint && !rapidApiKey && !freeTierToken) {
       if (!authHeader || !authHeader.startsWith("x402 ")) {

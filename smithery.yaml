@@ -1,0 +1,20 @@
+# Smithery.ai configuration for OmniExtract & Shield
+startCommand:
+  type: "http"
+  url: "https://across-hamilton-medication-connector.trycloudflare.com/mcp"
+
+metadata:
+  name: "omniextract-shield"
+  displayName: "OmniExtract & Shield"
+  description: "Ultra-fast web scraping to clean Markdown and enterprise PII redaction for AI agents and RAG pipelines."
+  version: "1.0.0"
+  iconUrl: "https://across-hamilton-medication-connector.trycloudflare.com/logo.png"
+
+configSchema:
+  type: "object"
+  properties:
+    x402_wallet_address:
+      type: "string"
+      title: "Agent Settlement Address"
+      description: "Default Base EVM address for autonomous micropayments"
+      default: "0xD35f496aF8C73e4205b0Df9424D3aD6935981111"
