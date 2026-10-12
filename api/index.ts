@@ -117,6 +117,75 @@ export default async function handler(req: Request): Promise<Response> {
     }), { headers: corsHeaders });
   }
 
+  // Robots.txt
+  if (url.pathname === "/robots.txt") {
+    const robots = `User-agent: *
+Allow: /
+Sitemap: https://omniextract-shield.omniextract-engine.workers.dev/sitemap.xml
+`;
+    return new Response(robots, { headers: { "Content-Type": "text/plain; charset=utf-8", "Access-Control-Allow-Origin": "*" } });
+  }
+
+  // Sitemap.xml
+  if (url.pathname === "/sitemap.xml") {
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://omniextract-shield.omniextract-engine.workers.dev/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://omniextract-shield.omniextract-engine.workers.dev/docs</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://omniextract-shield.omniextract-engine.workers.dev/openapi.json</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://omniextract-shield.omniextract-engine.workers.dev/llms.txt</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://omniextract-shield.omniextract-engine.workers.dev/.well-known/agent.json</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://omniextract-shield.omniextract-engine.workers.dev/.well-known/mcp/server-card.json</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>`;
+    return new Response(sitemap, { headers: { "Content-Type": "application/xml; charset=utf-8", "Access-Control-Allow-Origin": "*" } });
+  }
+
+  // LLMs.txt for AI Search & Agent Indexing
+  if (url.pathname === "/llms.txt") {
+    const llms = `# OmniExtract & Shield API
+> High-speed URL to Markdown reader and enterprise PII redaction engine for AI pipelines and LLMs.
+
+## Overview
+- Live URL: https://omniextract-shield.omniextract-engine.workers.dev
+- RapidAPI Hub: https://rapidapi.com/Gee123a/api/omniextract-n-shield
+- GitHub Repository: https://github.com/Gee123a/omniextract-engine
+
+## Capabilities
+1. POST /v1/extract: Extracts clean Markdown, title, description, and token count from any web URL.
+2. POST /v1/sanitize: Redacts sensitive PII, emails, credit cards, SSNs, phone numbers, and API keys.
+3. POST /mcp: Native Model Context Protocol (JSON-RPC) endpoint for Cursor, Claude, Windsurf, and LLM agents.
+
+## Payment Rails
+- RapidAPI: $9.99/mo PRO subscription or Free tier.
+- Autonomous Agents (x402): $0.002 per call via Base EVM address 0xD35f496aF8C73e4205b0Df9424D3aD6935981111.
+`;
+    return new Response(llms, { headers: { "Content-Type": "text/markdown; charset=utf-8", "Access-Control-Allow-Origin": "*" } });
+  }
+
   // Root & Docs
   if (url.pathname === "/" || url.pathname === "/docs") {
     const swaggerHtml = `<!DOCTYPE html>
@@ -124,7 +193,33 @@ export default async function handler(req: Request): Promise<Response> {
 <head>
   <meta charset="utf-8" />
   <title>OmniExtract & Shield API (Cloud 24/7)</title>
+  <meta name="description" content="High-speed URL to Markdown reader and enterprise PII redaction engine for AI pipelines and LLMs. 8,600 req/s with dual-rail monetization." />
+  <meta name="keywords" content="markdown extractor, pii redaction, web scraper, llm rag, mcp server, agent tools, rapidapi, x402" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "OmniExtract & Shield API",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "description": "High-speed URL to Markdown reader and enterprise PII redaction engine for AI pipelines and LLMs.",
+    "offers": [
+      {
+        "@type": "Offer",
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "description": "PRO Monthly Subscription"
+      },
+      {
+        "@type": "Offer",
+        "price": "0.002",
+        "priceCurrency": "USD",
+        "description": "Per-Request x402 Micropayment"
+      }
+    ]
+  }
+  </script>
   <style>
     body { margin: 0; background: #0f172a; color: #f8fafc; font-family: system-ui, sans-serif; }
     .top-banner { background: #1e293b; padding: 16px 24px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
@@ -229,7 +324,7 @@ export default async function handler(req: Request): Promise<Response> {
   // Auth Gate
   const rapidApiKey = req.headers.get("X-RapidAPI-Key") || req.headers.get("X-RapidAPI-Proxy-Secret");
   const authHeader = req.headers.get("Authorization");
-  const isPublic = url.pathname === "/health" || url.pathname === "/" || url.pathname === "/docs" || url.pathname === "/openapi.json" || url.pathname.startsWith("/.well-known/") || url.pathname === "/mcp";
+  const isPublic = url.pathname === "/health" || url.pathname === "/" || url.pathname === "/docs" || url.pathname === "/openapi.json" || url.pathname === "/robots.txt" || url.pathname === "/sitemap.xml" || url.pathname === "/llms.txt" || url.pathname.startsWith("/.well-known/") || url.pathname === "/mcp";
 
   if (!isPublic && !rapidApiKey) {
     if (!authHeader || !authHeader.startsWith("x402 ")) {
